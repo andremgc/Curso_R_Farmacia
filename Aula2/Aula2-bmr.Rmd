@@ -528,7 +528,7 @@ habitantes por km²
 3. Utilize cada função _join_ considerando este data frame e o __DF__, criado durante
 a aula. (considere ambos os casos, em que __DF__ é o primeiro argumento ou o segundo).
 
-## Tenho que saber tudo isso de cór?
+## Tenho que saber tudo isso de cor?
 
 Quanto mais sabemos utilizar uma feramenta sem consulta, melhor!
 
