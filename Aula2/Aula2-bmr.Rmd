@@ -543,26 +543,49 @@ Há diversos tutoriais na _internet_ sobre uma grande variedades de pacote.
 [_Stack Overflow_](https://stackoverflow.com/questions/tagged/r) possui perguntas e respostas.
 Se não achar algo que procura (o que é raro), faça sua pergunta.
 
-## Atividade
+## Atividades
+
+Faça os exercícios a seguir em um Script de R, que deve ser enviado ao professor. E
+envie o arquivo .csv final também.
+
+Comente o seu código para que você lembre do que fez, e para que o professor possa 
+corrigir apropriadamente.
 
 Exploraremos o _data frame_ __iris__. Digite \texttt{View(iris)} para verificar
-que este _data frame_ pode ser acessado
+que este _data frame_ pode ser acessado.
 
-1. Crie irisMolten, uma versão _molten_ de iris, isto é, que tenha uma coluna com multiplas variáveis. Com as colunas _Species_, _Variable_ e _Value_.
+* Crie irisMolten, uma versão _molten_ de iris, isto é, que tenha uma coluna com multiplas variáveis. Com as colunas _Species_, _Variable_ e _Value_.
 
-2. A partir de irisMolten, crie um _data frame_ _Tidy_, como o original.
+* A partir de irisMolten, crie um _data frame_ _Tidy_, como o original.
 
-1. Crie iris2, que seja iguala iris, mas com novas colunas:
-    a. __Sepal.Ratio__: Igual à divisão de __Sepal.Length__ e __Sepal.Width__.
-    b. __Petal.Ratio__: Igual à divisão de __Petal.Length__ e __Petal.Width__.
+******
 
-2. Verifique a média das colunas criadas.
+* Crie iris2, que seja iguala iris, mas com novas colunas:
+    * __Sepal.Ratio__: Igual à divisão de __Sepal.Length__ e __Sepal.Width__.
+    * __Petal.Ratio__: Igual à divisão de __Petal.Length__ e __Petal.Width__.
+    
+* Verifique a média das colunas criadas.
 
-3. Verifique a média das colunas criadas, extratificando por __Species__. Discuta se há diferença.
+* Verifique a média das colunas criadas, extratificando por __Species__. Discuta se há diferença.
 
-4. Verifique o tamanho da amostra para cada __Species__.
+* Verifique o tamanho da amostra para cada __Species__.
 
-5. Baixe o arquivo 
+* Carregue o arquivo disponível na url: 
+"https://raw.githubusercontent.com/andremgc/Curso_R_Farmacia/master/Aula2/Data/irisAux.csv"
+
+* Crie um dataset iris4 que inclua iris2 e uma colunoa a informação do sinonimo da esécie, contida na coluna 'Alef' do dataframe disponibilizado.
+
+* Salve o dataframe iris4 arquivo em um '.csv'.
+
+## swirl
+
+Faça os caítulos de 1 a 3 do curos "Getting and Cleaning Data"
+
+```{r, eval=F}
+library(swirl)
+install_from_swirl("Getting and Cleaning Data")
+```
+
 
 *********
 \centering
