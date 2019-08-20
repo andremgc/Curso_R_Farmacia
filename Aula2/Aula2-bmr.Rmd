@@ -1,0 +1,570 @@
+---
+title: Data frames - leitura e manipulação.
+author: |
+  | André Moura Gomes da Costa - andmgdc@gmail.com
+  | Maria das Gracas Braga Ceccato
+date: "14/08/2019"
+output:
+  beamer_presentation:
+    theme: "Frankfurt "
+    colortheme: "whale"
+    fonttheme: "structurebold"
+    slide_level: 2
+header-includes:
+   - \usepackage[brazilian]{babel} # idioma
+   - \usepackage[utf8]{inputenc} 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = ">>")
+```
+
+# Projetos do RStudio
+
+<!-- Mudar o ## do resultado do rmd -->
+<!-- Rever slides operação com vetores -->
+<!-- repetir tabela cidades -->
+
+*********
+Uma funcionalidade muito útil do RStudio é o uso de projetos. Com eles, 
+é possível manter uma boa organização do trabalho, facilitando a escrita de programas
+e a continuidade do trabalho.
+
+Um projeto permite manter salvos:
+
+- Quais _scripts_ estão abertos.
+- As variáveis no ambiente global.
+- O histórico de comandos.
+- O espaço de trabalho. (Mas o que é isto?)
+
+## O espaço de trabalho
+
+Quando utilizamos o R, muitas vezes queremos interagir com outros arquivos.
+
+Podemos criar e ler arquivos de dados ou de _scripts_.
+
+Uma maneira de acessar esses arquivos é expecificando um caminho global (e.g.: 
+"C:/users/andre/projeto/dados.csv"). 
+
+Devemos usar __/__  ou __\\\\__ para especificar o caminho no R, pois __\\__ é um character especial.
+
+```{r, eval=F}
+"hello\U1F30D"
+```
+
+A função \texttt{file.choose()} pode ser útil.
+
+
+
+
+##  O espaço de trabalho
+
+Para facilitar a usabilidade, e permitir o uso de um mesmo código em máquinas diferentes,
+podemos acessar arquivos utilizando um caminho relativo.
+
+O espaço de trabalho é a pasta de referência para um caminho relativo. 
+
+Se o espaço de trabalho estiver na pasta "C:/users/andre/projeto",
+podemos acessar o mesmo arquivo anterior apenas referenciando "./dados.csv".
+
+Se quisermos referenciar a pasta pai do ambiente de trabalho, podemos usar "../".
+
+##  O espaço de trabalho
+
+Quando abrimos um projeto do RStudio, o ambiente de trabalho passa a ser a pasta
+em que temos o arquivo __.Rproj__
+
+Para verificar em qual pasta está o ambiente de trabalho, usamos a função
+\texttt{getwd()}
+
+Para alterar o local do ambiente de trabalho, usamos a função
+\texttt{setwd()}
+
+***
+
+```{r, cache=T}
+getwd()
+
+# Definindo espaço de trabalho com caminho absoluto
+setwd("/home/andre")
+getwd()
+
+# Definindo espaço de trabalho com caminho relativo
+setwd("./2019")
+getwd()
+
+setwd("../")
+getwd()
+```
+
+## Criando um projeto
+
+Vamos trabalhar, neste curso, utilizando projetos, por isso ser considerado uma
+boa prática.
+
+__file - new project__
+
+# Arquivos externos
+
+## Lendo arquivos em formato textual
+
+Usamos a função \texttt{read.table()} para lermos arquivos que podem ser lidos
+em um editor de texto (como bloco de notas).
+
+* Flexível e robusta.
+* Parâmetros mais importantes: _file_, _header_, _sep_, _skip_.
+* \texttt{read.csv()} e \texttt{read.csv2()} são baseadas nela.
+    * \texttt{read.csv()} é parametrizada para ler __.csv__ com separador _,_ . 
+    * \texttt{read.csv2()} é parametrizada para ler __.csv__ com separador _;_ .
+    
+Para salvar algum data frame em um arquivo de texto, podemos usar funções como
+\texttt{write.table()} ,\texttt{write.csv()}  e \texttt{write.csv()}
+    
+
+## Lendo arquivos de outros programas
+
+Uma maneira possível de se ler planilhas do excel no R é salvando estes arquivos
+como __.csv__ e utilizando as funções descritas acima.
+
+Alguns pacotes permitem a manipulação direta de arquivos do excel, como o __xlsx__.
+
+O pacote  __xlsx__ possui as funções \texttt{write.xlsx()} e \texttt{read.xlsx()},
+similares às apresentadas anteriormente.
+
+Também, podemos ler arquivos __.sav__ do _SPSS_ :
+
+```{r eval=F}
+library(foreign)
+dataset = read.spss(
+"/home/andre/Dados/Penalti_resposta.SAV", 
+        to.data.frame=TRUE)
+```
+
+## Processando um arquivo do R: \texttt{source()}
+
+Muitas vezes, queremos executar comandos que estão registrados em arquivos do R
+que não é o que digitamos.
+
+Ao invés de usar  _ctrl+v_ e _ctrl+c_, é mais interessante
+lermos diretamente o que há nestes arquivos. 
+
+Códigos mais fáceis de ler e uma consistência maior entre os arquivos. 
+
+```{r eval=F}
+source("./scriptexterno.r")
+```
+
+
+# Deixando seus dados _Tidy_
+
+## O que são dados _Tidy_?
+
+_Tidy_: Arrumado; Limpo; Ordenado; Asseado; Ben-arranjado;
+
+
+1.  Cada variável deve ter um uma própria coluna.
+2.  Cada observação deve ter uma própria linha.
+3.  Deve haver uma tabela para cada tipo de variável
+3.  Cada valor deve estar em uma própria célula.
+
+Muitas funções no R são projetadas para serem usadas com dados _tidy_.
+
+O [artigo](https://vita.had.co.nz/papers/tidy-data.pdf) de Hadley Wickham
+explica o por quê de se utilizar dados _tidy_.
+
+## Documentação dos dados
+
+### O _code book_
+
+Um documento, como em word, texto, markdown, etc. Que descreve seus dados
+
+* Informações sobre variáveis, como unidades.
+* Informações de escolhas de sumarizações.
+* Informação sobre o _design_ do experimento.
+
+### A lista de instrução
+
+Preferencialmente, _script_ que:
+
+* Abre os arquivos originais, crus.
+* Processa os dados.
+* Salva uma saída _tidy_.
+
+Caso não seja possível salvar um script, use um texto, bem detalhado (versões do _software_, parâmetros, etc.).
+
+## O pacote _tidyr_
+
+Muitas vezes, entramos em contato com dados que não estão em formato _tidy_. 
+
+O pacote _tidyr_ nos ajuda a transformá-los em _tidy_, com as  funções principais.
+
+* \texttt{gather()} transforma multiplas colunas em duas : chave e valor.
+* \texttt{spread()} faz a operação reversa, transformando um par chave-valor
+em múltiplas colunas.
+* \texttt{unite()} une duas colunas em uma.
+* \texttt{separate()} separa uma coluna em duas.
+
+## Praticando com _tidyr_
+
+```{r}
+set.seed(1) 
+df1 <- data.frame(
+        # Número do participante
+        Participante = 1L:12L, 
+        # Informaçõs (c=controle, e=experimental,
+        #             f= feminino, m = masculino)
+        Informação = rep(c("cm", "cm", "cf", 
+                           "ef", "em", "ef"),2),
+        # Resultados das medições nos 3 dias.
+        ObservacaoDia1 = rnorm(n = 12,
+                               mean = 80, sd = 15), 
+        ObservacaoDia2 = rnorm(n = 12,
+                               mean = 88, sd = 8),
+        ObservacaoDia3 = rnorm(n = 12,
+                               mean = 90, sd = 7)
+)
+```
+
+##  Praticando com _tidyr_
+
+Crie o data frame da página anterior e o visualize.
+
+Descuta em pares:
+
+* O que precisamos fazer para transformá-lo em um _tidy_?
+* Quais funções vocês acham que será necessário utilizar?
+
+## Gather
+
+Note que a observação para cada dia está em uma coluna diferente, mas em um
+conjunto de dados tidy, cada variável deve ter sua própria coluna. 
+
+As observações em diferentes dias devem estar na mesma coluna.
+
+```{r}
+library(tidyr)
+df2 <-  gather(df1, key = "Dia", value = "Observação",
+               ObservacaoDia1,
+               ObservacaoDia2,
+               ObservacaoDia3)
+
+# ou df2 <- df1 %>% gather( "Dia"...)
+```
+
+## Separate
+
+Pode-se observar que a coluna Informações contém mais de um valor: O grupo ao qual
+o partipante pertence e o seu sexo. Vamos separar estas colunas:
+
+```{r}
+df3 <- separate(df2, col = Informação, 
+                into = c('Grupo','Sexo'),
+                #Separar depois do 1o digito.
+                sep = 1)
+```
+
+```{r, echo = F}
+knitr::kable(head(df3))
+```
+
+## O operador %>%
+
+O operador %>% (_pipe_) passa uma variável como primeiro argumento da função.
+É muito útil para economizar linhas de código e gerar um _script_ de leitura 
+mais fácil. (\texttt{x %>% fun(y)} é equivalente a \texttt{fun(x,y)}) 
+
+```{r}
+df3b <- df1 %>% 
+        gather(key = "Dia", value = "Observação",
+               ObservacaoDia1,
+               ObservacaoDia2,
+               ObservacaoDia3) %>%
+        separate(col = Informação, 
+                into = c('Grupo','Sexo'),
+                sep = 1) 
+```
+
+## Exemplo 2
+
+O que podemos fazer para transformar estes dados em _tidy_?
+
+```{r}
+dfEx2.1 <- data.frame(
+        nome = c("João", "Maria", "João"),
+        sobrenome = c("da Silva", "da Silva", 
+                      "Antunes"),
+        variavel = c(rep(c("altura"), 3), 
+                     rep(c("peso"), 3),
+                     rep(c("idade"), 3)),
+        valor = c(180, 170, 170, 
+                  80, 70, 70,
+                  30, 25, 20)
+)
+```
+
+## Spread
+
+Podemos observar que a coluna __valor__ possui variáveis de mais de uma variável.
+
+```{r}
+dfEx2.2 <- dfEx2.1 %>% spread(key = variavel,
+                              value = valor)
+```
+
+```{r, echo = F}
+knitr::kable(head(dfEx2.2))
+```
+
+## Unite
+
+Podemos considerar que o nome e sobrenome são uma variável só.
+
+```{r}
+dfEx2.3 <- dfEx2.2 %>% unite (col = nomeCompleto,
+                              nome, sobrenome,
+                              sep = " ",
+                              remove = TRUE)
+```
+
+```{r, echo = F}
+knitr::kable(head(dfEx2.3))
+```
+
+
+## Exercícios:
+
+A partir de __df3__ chegue a um dataframe equivalente ao __df1__ 
+
+A partir de __df2Ex.3__ chegue a um dataframe equivalente ao __df2Ex.1__
+
+
+# Manipulando DFs com _dplyr_
+
+## _dplyr_
+
+Um pacote muito útil para transformar e sumarizar dados é o _dplyr_.
+
+Este pacote apresenta as vantagens de ser intuitivo e de apresentar um bom 
+desempenho computacional.
+
+Suas principais funções são:
+
+* \texttt{select()} $\rightarrow$	seleciona colunas
+* \texttt{filter()} $\rightarrow$	filtra linhas
+* \texttt{arrange()} $\rightarrow$	ordena linhas
+* \texttt{mutate()} $\rightarrow$	altera uma coluna
+* \texttt{summarise()}  $\rightarrow$	sumariza valores
+* \texttt{group\_by()}  $\rightarrow$	agrupa
+* funções _join_ para juntar _data frames_.
+
+A seguir, alguns exemplos de uso serão mostrados. Um bom tutorial pode ser 
+encontrado em https://genomicsclass.github.io/book/pages/dplyr_tutorial.html.
+
+## select()
+
+Seleciona colunas de interesse para análise. Execute os códigos a seguir,
+mas antes de executar uma linha, tente prever qual será a saída.
+
+```{r}
+dfdp <- dfEx2.3
+```
+
+
+```{r, eval=F}
+dfdp %>% select(peso, idade)
+dfdp %>% select(altura:peso)
+dfdp %>% select(-peso)
+dfdp %>% select(-peso, -idade, -altura)
+```
+
+Suas operações poderiam ser feitas com colchetes, mas o __dplyr__ possui uma  
+sintaxe muito mais amigável.
+
+## filter()
+
+Seleciona as linhas que satisfazem alguma condição.
+
+```{r, eval=F}
+dfdp %>% filter (altura == 180)
+dfdp %>% filter (altura < 180)
+dfdp %>% filter (altura < 180 & idade < 25)
+dfdp %>% filter (altura == 180 | idade < 25)
+dfdp %>% filter (nomeCompleto == "João Antunes")
+dfdp %>% filter (idade %in% c(20,30))
+```
+
+## arrange()
+
+Ordena o data frame. A ordenação passada primeiro tem preferência e, em caso de empate,
+segue para as seguintes. Se não for especificado, a ordem é crescente.
+
+```{r, eval=F}
+dfdp %>% arrange(altura)
+dfdp %>% arrange(desc(altura))
+dfdp %>% arrange(nomeCompleto)
+dfdp %>% arrange(altura, desc(idade))
+```
+
+
+## mutate()
+
+Altera ou cria uma coluna. Pode ser baseada em operações encolvendo: colunas do _data frame_,
+vetores externos, números externos.
+
+```{r, eval=F}
+dfdp %>% mutate(IMC = peso/(altura/100)^2)
+dfdp %>% mutate(altura = altura/100)
+dfdp %>% mutate(sexo = factor(c("M","M","F")))
+
+dfdp %>% mutate(altura = altura/100,
+                IMC = peso/altura^2,
+                sexo = factor(c("M","M","F")))
+```
+
+## summarise()
+
+Sumariza variáveis do _data frame_.
+
+```{r,eval=F}
+dfdp %>% summarise(altura.media = mean(altura),
+                   altura.std = sd(altura),
+                   n = n(),
+                   altura.ndist = n_distinct(altura),
+                   peso.min = min(peso),
+                   peso.max = max(peso),
+                   nome.first = first(nomeCompleto)
+                   )
+
+```
+
+## group_by()
+
+Agrupa variáveis por uma variável de referência ou a combinação de várias. 
+
+Usada principalmente em conjunbto com summarise.
+
+```{r, eval=F}
+dfdp <- dfdp %>% mutate(sexo = factor(c("M","M","F")))
+
+dfdp %>% group_by(sexo) %>%
+        summarise(altura.media = mean(altura),
+                  altura.std = sd(altura),
+                  n = n(),
+                  altura.ndist = n_distinct(altura),
+                  peso.min = min(peso),
+                  peso.max = max(peso),
+                  nome.first = first(nomeCompleto)
+        ) %>% ungroup()
+```
+
+## group_by()
+
+Também afeta outras funções como mutate, e pode afetar outras, se especificado, como arrange.
+
+```{r, eval=F}
+dfdp %>% mutate(desvioAltura = altura - mean(altura))
+dfdp %>% group_by(sexo) %>% mutate(desvioAltura = altura - mean(altura))
+```
+
+# Unindo data frames
+
+## Concatenando
+
+Há situações em que, por algum motivo, uma mesma tabela está dividida em mais
+de um _data frame_. Nesses casos podemos usar as funções \texttt{cbind()}, para concatenar
+colunas, e \texttt{rbind()}, para concatenar linhas. 
+
+```{r, eval=F}
+ColsExtra <- data.frame(
+        nomeCompleto = c("Ana Souza", "Pedro Moura"),
+        altura = c(160, 165), idade = c(30, 18),
+        peso = c(63, 75), sexo = c("F","M")
+) 
+RowsExtra <- data.frame(
+        pontos = rnorm(5, 6, 2),
+        cidade = factor(c("BH", "BH", "BH",
+                          "SP", "SP"))
+)
+DF <- dfdp %>% rbind(ColsExtra) %>% cbind(RowsExtra) 
+```
+
+## Funções _Join_
+
+Em dados _Tidy_, cada tipo de variável deve estar em uma tabela diferente.
+Para juntar informações de tabelas distintas usa-se funções _join_:
+
+- _Mutating Join_
+\vspace{3pt}
+   - \texttt{left\_join(x,y)} : \newline{} Todas as linhas de x; Todas colunas de x e y.
+   \vspace{3pt}
+   - \texttt{righ\_join(x,y)} : \newline{} Todas as linhas de y; Todas colunas de x e y.
+   \vspace{3pt}
+   - \texttt{full\_join(x,y)} : \newline{} Todas as linhas de x e y; Todas as colunas de x e y.
+   \vspace{3pt}
+   - \texttt{inner\_join(x,y)} : \newline{} Linhas de x que correspondem a uma linha de y; \newline{}  Todas colunas de x e y. 
+
+##  Funções _Join_
+
+- _Filtering Join_ 
+\vspace{3pt}
+   - \texttt{semi\_join(x,y)} : \newline{}  Linhas de x que correspondem a uma linha de y;  \newline{} Colunas de x.
+   \vspace{3pt}
+   - \texttt{anti\_join(x,y)}  : \newline{}  Linhas de x que __não__ correspondem a uma linha de y; \newline{} Colunas de x.
+   
+## Praticando
+
+Vamos praticar um pouco para compreender estas funções.
+
+1. Crie um data frame com três colunas: cidade, população e área.
+   a. A coluna cidade deve ter os valores "SP"; "RJ"; "BH".
+   b. A coluna população deve ter os valores 12.2; 6.7; e 2.5. [milhões de habitantes]
+   c. A coluna população deve ter os valores 1500; 1200; e 300. [km²]
+
+2. A partir deste data frame, crie uma coluna de densidade populacional, com unidade 
+habitantes por km²
+
+3. Utilize cada função _join_ considerando este data frame e o __DF__, criado durante
+a aula. (considere ambos os casos, em que __DF__ é o primeiro argumento ou o segundo).
+
+## Tenho que saber tudo isso de cor?
+
+Quanto mais sabemos utilizar uma feramenta sem consulta, melhor!
+
+Não há como saber todas as funções e parametros.
+
+Quando souber a função, accessar seu arquivo de ajuda é esclarecedor.
+
+[_Cheat sheets_](https://www.rstudio.com/resources/cheatsheets/)
+ (papéis de cola), podem ser muito úteis no processo de aprendizado!
+
+Há diversos tutoriais na _internet_ sobre uma grande variedades de pacote.
+
+[_Stack Overflow_](https://stackoverflow.com/questions/tagged/r) possui perguntas e respostas.
+Se não achar algo que procura (o que é raro), faça sua pergunta.
+
+## Atividade
+
+Exploraremos o _data frame_ __iris__. Digite \texttt{View(iris)} para verificar
+que este _data frame_ pode ser acessado
+
+1. Crie irisMolten, uma versão _molten_ de iris, isto é, que tenha uma coluna com multiplas variáveis. Com as colunas _Species_, _Variable_ e _Value_.
+
+2. A partir de irisMolten, crie um _data frame_ _Tidy_, como o original.
+
+1. Crie iris2, que seja iguala iris, mas com novas colunas:
+    a. __Sepal.Ratio__: Igual à divisão de __Sepal.Length__ e __Sepal.Width__.
+    b. __Petal.Ratio__: Igual à divisão de __Petal.Length__ e __Petal.Width__.
+
+2. Verifique a média das colunas criadas.
+
+3. Verifique a média das colunas criadas, extratificando por __Species__. Discuta se há diferença.
+
+4. Verifique o tamanho da amostra para cada __Species__.
+
+5. Baixe o arquivo 
+
+*********
+\centering
+        \Huge Obrigado!
+
