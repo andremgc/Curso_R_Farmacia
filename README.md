@@ -1,1 +1,1 @@
-This repo contains the material being prepared for the R course I will give
+Repositório para material das aulas de R.
