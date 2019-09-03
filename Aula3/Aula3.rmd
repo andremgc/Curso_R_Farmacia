@@ -1,0 +1,129 @@
+---
+title: Data frames - leitura e manipulação.
+author: |
+  | André Moura Gomes da Costa - andmgdc@gmail.com
+  | Maria das Gracas Braga Ceccato
+date: "04/09/2019"
+output:
+  beamer_presentation:
+    theme: "Custom"
+    colortheme: "whale"
+    fonttheme: "structurebold"
+    slide_level: 2
+header-includes:
+   - \usepackage[brazilian]{babel} # idioma
+   - \usepackage[utf8]{inputenc} 
+---
+        
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = ">>")
+```
+
+# Manipulação de _characters_
+
+## Manipulação de _characters_
+
+Podemos fazer manipuçação de _characters_ com alguns pactoes diferentes. 
+
+Aqui será apresentado o pacote __stringr__, que apresenta funções equivalentes
+às do pacote __base__, mas com nomes mais fáceis.
+
+O _cheatsheet_ relativo a este pacote é bastante explicativo.
+
+Para a manipulação apropriada de _characters_ devemos aprender, também,
+expressões regulares, _regex_.
+
+## Algumas possibilidades
+
+Identificar um padrão no início ou no fim de um _character_.
+
+Identificar padrões com repetição de um dígito.
+
+Idenfificar um padrão de uma URL válida.
+
+Identificar um número dentro de um texto.
+
+## Caracteres especiais úteis:
+
+- ^ - Início do character 
+- \$ - Fim do character
+- [] - Classe de character
+    - [a-z]; [A-Z]; [0-9] - Caracteres em um intervalo
+    - [^] - Negação
+- \| - Ou lógico
+- () - Restrição de escopo
+- ?! - Ignorar diferença entre maiúscula e minúscula
+- ? - Existência ou não de dado dígito (ou expressão)
+- \. - Qualquer caracter
+- \* - Ocorrência de 0 ou mais vezes do último digito 
+- \+ - Ocorrência de 1 ou mais vezes do último digito 
+- \{\} - Ocorrência de um dado número de vezes de um padrão 
+
+## Usando na prática
+
+Vamos ver o uso destas funcionalindas em pequenos exemplos.
+
+Vamos abir o arquivo Aula3_stringr.R e explorar algumas funções do _stringr_.
+
+\vspace{10pt}
+Há situações em que deve-se utilizar as expressões regulares de maneiras
+criativas. É muito útil buscar ajuda na internet, pois, provavelmente, você 
+não é o primeiro a ter esse tipo de problema.
+
+# Lidando com dados temporais no R
+
+## __lubridate__
+
+O R possui classes especiais para se lidar com tempo. 
+
+O pacote __lubridate__ permite uma fácil manipulação desses dados temporais.
+
+### Algumas funções úteis:
+
+- \texttt{ymd, mdy, dmy}
+- \texttt{ymd\_hms, mdy\_hs, dmy\_h}
+- \texttt{year, month, mday, yday, hour, minute, second}
+- \texttt{with\_tz, force\_tz}
+
+# Sumarizando dados
+## Sumarizando dados
+
+### Vamos abir o arquivo Aula3_Descritivas.R e explorar algumas funções:
+
+- \texttt{mean(), sd(), var(), min(), max(), median(), quantile(), sum()}
+- \texttt{summary()} 
+- \texttt{str()}
+
+## Gráficos 
+
+Algumas funções do R para visualizar dados graficamente são:
+
+- plot()
+- hist()
+- boxplot()
+- stem()
+
+Na próxima aula exploraremos o uso do pacote ggplot2 para fazer gráficos
+muito interessantes e de visual agradável.
+
+## Gráficos de pares
+
+Há diversas funções de pacotes que permitem a visualização de gráficos de pares facilmente.
+
+- \texttt{pairs()} do __graphics__ (gráfico padrão do R)
+- \texttt{ggpairs()} do __GGally__, baseado no ggplot
+- \texttt{pairs.panel()} do pacote __psych__
+
+## Exercícios
+
+Abra Aula3_exercícios.R e faça o código, seguindo as instruções.
+Envie o arquivo .R modificado
+
+
+
+*********
+
+\Huge Obrigado!
+        
+        
